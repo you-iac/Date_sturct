@@ -1,13 +1,22 @@
-#include"Date_Struct.h"
+#include"Data_Struct.h"
+//#include"Stack.h"
 
-int Stack_Init	(Stack* stack) 
+Stack* Stack_Init()
 {
-	stack->node = NULL;
-	stack->Size = 0;
+	Stack* stack = (Stack*)malloc(sizeof(Stack));
+	if (stack) {
+		stack->node = NULL;
+		stack->Size = 0;
+		return stack;
+	}
+	else {
+		return NULL;
+	}
+	
 }
-int Stack_Empty	(Stack* stack) 
+int Stack_InEmpty	(Stack* stack) 
 {
-	return stack->Size == 0 ? 1 : 0;
+	return stack->Size > 0 ? 1 : 0;
 }
 int Stack_Destroy(Stack* stack) 
 {
@@ -21,33 +30,39 @@ int Stack_Destroy(Stack* stack)
 	free(stack);
 	return 0;
 }
-int Stack_Push	(Stack* stack, ElemType X) 
+int Stack_Push	(Stack* stack, ElemNodeType X) 
 {
 	Node* P = (Node*)malloc(sizeof(Node));
-	P->Data = X;
-	P->Next = stack->node;
-	stack->node = P;
-	stack->Size++;
+	if (P) {
+		P->Data = X;
+		P->Next = stack->node;
+		stack->node = P;
+		stack->Size++;
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
-ElemType Stack_Pop(Stack* stack)
+int Stack_Pop(Stack* stack, ElemNodeType* X)		//Stack and Element's Point
 {
-	if (stack->Size > 0) {
+	if ( Stack_InEmpty(stack) ) {
 		Node* P = stack->node;
 		stack->node = P->Next;
-		ElemType X = P->Data;
+		*X = P->Data;
 		stack->Size--;
-		return X;
+		return 1;
 	}else {
 		return 0;
 	}
 }
-ElemType Stack_GetTop(Stack* stack)
+int Stack_GetTop(Stack* stack, ElemNodeType* X)
 {
-	if (stack->Size > 0) {
+	if ( Stack_InEmpty(stack) ) {
 		Node* P = stack->node;
-		ElemType X = P->Data;
-		return X;
+		*X = P->Data;
+		return 1;
 	}else {
 		return 0;
 	}
